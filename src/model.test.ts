@@ -1,0 +1,4 @@
+import {describe,it,expect} from 'vitest';
+import {budget,emptyState,hours,overlaps,validateImport,type Activity} from './model';
+const a:Activity={id:'1',bucketId:'b',parentId:null,title:'Test',description:'',start:'2026-10-15T09:00:00',end:'2026-10-15T11:30:00',actualHours:2,completed:true,effort:'medium',fixed:false,recurrence:'none',seriesId:null};
+describe('time and data',()=>{it('calculates hours and budget',()=>{const s=emptyState();s.activities=[a];expect(hours(a)).toBe(2.5);expect(budget(s,'b',new Date('2026-10-15'),new Date('2026-10-16'),5)).toEqual({planned:2.5,actual:2,remaining:2.5,percent:40});});it('finds conflicts',()=>{expect(overlaps([a],{...a,id:'2',start:'2026-10-15T10:00:00',end:'2026-10-15T12:00:00'})).toHaveLength(1);});it('rejects corrupt imports',()=>{expect(()=>validateImport({activities:[]})).toThrow();});});
